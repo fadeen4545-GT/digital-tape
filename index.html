@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตลับเมตรดิจิทัลออนไลน์</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 22px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .display-box {
+      background: #007bff;
+      color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+    .value {
+      font-size: 48px;
+      font-weight: bold;
+    }
+    .unit {
+      font-size: 18px;
+    }
+    .status {
+      font-size: 13px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>📏 ตลับเมตรดิจิทัล</h1>
+    <div class="display-box">
+      <span class="value" id="distanceVal">0.0</span>
+      <span class="unit">cm</span>
+    </div>
+    <div class="status">สถานะ: <span id="statusText">กำลังเชื่อมต่อ...</span></div>
+  </div>
+
+  <!-- นำเข้า Firebase JS SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // ตั้งค่าโครงสร้างการเชื่อมต่อ Firebase
+    const firebaseConfig = {
+      databaseURL: "https://your-project-id-default-rtdb.firebaseio.com" // ใส่ Database URL ของคุณ
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // ดึงข้อมูล Realtime
+    const distanceRef = database.ref('/digital_tape/distance');
+    distanceRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data !== null) {
+        document.getElementById('distanceVal').innerText = parseFloat(data).toFixed(1);
+        document.getElementById('statusText').innerText = "อัปเดตล่าสุดเรียบร้อย";
+      }
+    });
+  </script>
+</body>
+</html>
